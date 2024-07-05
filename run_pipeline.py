@@ -141,7 +141,7 @@ def build_hf_data_files(cc):
             "X": cc.projections[:, 0],
             "Y": cc.projections[:, 1],
             "labels": cc.cluster_labels,
-            "content_display": [textwrap.fill(txt[:1024], 64) for txt in cc.texts],
+            "content_display": [textwrap.fill(txt, 64) for txt in cc.texts],
         }
     )
     return Dataset.from_pandas(df)
@@ -157,7 +157,7 @@ def build_and_push(cc, args):
 
     repo_name = args.save_load_path.split("/")[-1]
     print(f"Pushing to the hub at {repo_name}...")
-    ds.push_to_hub(f"{args.username}/{repo_name}", private=True)
+#     ds.push_to_hub(f"{args.username}/{repo_name}", private=True)
     data_clusters.push_to_hub(f"{args.username}/{repo_name}_clusters", private=True)
 
 
@@ -193,7 +193,7 @@ def main():
 
         print(ds)
         indexes = (
-            range(args.start, args.end) if args.start > 0 else range(args.n_samples)
+            range(args.start, args.end) if args.start > 0 else range(ds.num_rows)
         )
         text_start = f" starting from {args.start}" if args.start > 0 else ""
         print(f"Processing {len(indexes)} samples{text_start}")
